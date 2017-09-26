@@ -1,9 +1,11 @@
 package com.pucmm.MB.MBean;
 
 import com.pucmm.MB.Modelo.Contacto;
+import org.primefaces.event.RowEditEvent;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -27,6 +29,8 @@ public class formularioPrincMB implements Serializable{
     private String correo;
 
     private Set<Contacto> contact;
+
+    private  Contacto elegido;
 
     @PostConstruct
     private void inicializando(){
@@ -58,6 +62,21 @@ public class formularioPrincMB implements Serializable{
                 contact.add((Contacto)entry.getValue());
             }
         }
+    }
+
+    public void eliminar(){
+
+    }
+
+
+    public void onRowEdit(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Contacto editado", ((Contacto) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Edición cancelada", ((Contacto) event.getObject()).getNombre());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
 
@@ -107,5 +126,13 @@ public class formularioPrincMB implements Serializable{
 
     public void setContact(Set<Contacto> contact) {
         this.contact = contact;
+    }
+
+    public Contacto getElegido() {
+        return elegido;
+    }
+
+    public void setElegido(Contacto elegido) {
+        this.elegido = elegido;
     }
 }

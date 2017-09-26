@@ -26,34 +26,85 @@
          </h:panelGrid>
       </h:form>
 
-      <h:form>
+      <h:form id="miForm">
           <p:growl id="msgs" showDetail="true" />
 
-          <p:dataTable id="tablaCon" var="con" value="#{miFormulario.contact}">
+          <p:dataTable id="tablaCon" var="con" editable="true" value="#{miFormulario.contact}">
              <f:facet name="header">
                 Contactos
              </f:facet>
+
+             <p:ajax event="rowEdit" listener="#{miFormulario.onRowEdit}" update=":miForm:msgs" />
+             <p:ajax event="rowEditCancel" listener="#{miFormulario.onRowCancel}" update=":miForm:msgs" />
+
              <p:column headerText="Nombre">
-                <h:outputText value="#{con.nombre}" />
+                <p:cellEditor>
+                   <f:facet name="output"><h:outputText value="#{con.nombre}" /></f:facet>
+                   <f:facet name="input"><p:inputText id="nombre" value="#{con.nombre}"/></f:facet>
+                </p:cellEditor>
              </p:column>
              <p:column headerText="Apellido">
-                <h:outputText value="#{con.apellido}" />
+                <p:cellEditor>
+                   <f:facet name="output"><h:outputText value="#{con.apellido}" /></f:facet>
+                   <f:facet name="input"><p:inputText id="apellido" value="#{con.apellido}"/></f:facet>
+                </p:cellEditor>
              </p:column>
              <p:column headerText="Direccion">
-                <h:outputText value="#{con.direccion}" />
+                <p:cellEditor>
+                   <f:facet name="output"><h:outputText value="#{con.direccion}" /></f:facet>
+                   <f:facet name="input"><p:inputText id="direccion" value="#{con.direccion}"/></f:facet>
+                </p:cellEditor>
              </p:column>
              <p:column headerText="Telefono">
-                <h:outputText value="#{con.telefono}" />
+                <p:cellEditor>
+                   <f:facet name="output"><h:outputText value="#{con.telefono}" /></f:facet>
+                   <f:facet name="input"><p:inputText id="telefono" value="#{con.telefono}"/></f:facet>
+                </p:cellEditor>
              </p:column>
              <p:column headerText="Correo">
-                <h:outputText value="#{con.correo}" />
+                <p:cellEditor>
+                   <f:facet name="output"><h:outputText value="#{con.correo}" /></f:facet>
+                   <f:facet name="input"><p:inputText id="correo" value="#{con.correo}"/></f:facet>
+                </p:cellEditor>
              </p:column>
-             <!--<p:column style="width:32px;text-align: center">-->
-                <!--<p:commandButton update=":form:carDetail" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="View">-->
-                   <!--<f:setPropertyActionListener value="#{car}" target="#{dtSelectionView.selectedCar}" />-->
-                <!--</p:commandButton>-->
-             <!--</p:column>-->
+             <p:column>
+                <p:rowEditor />
+             </p:column>
+             <p:column>
+                <p:commandButton update=":miForm:carDetail" oncomplete="PF('carDialog').show()" icon="ui-icon-search" title="View">
+                   <f:setPropertyActionListener value="#{con}" target="#{miFormulario.elegido}" />
+                </p:commandButton>
+             </p:column>
+              <p:column>
+                  <p:commandButton action="#{miFormulario.eliminar()}"  icon="ui-icon-trash">
+                      <f:setPropertyActionListener value="#{con}"  target="#{miFormulario.elegido}" />
+                  </p:commandButton>
+              </p:column>
           </p:dataTable>
+
+         <p:dialog header="Car Info" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+            <p:outputPanel id="carDetail" style="text-align:center;">
+               <p:panelGrid  columns="2" rendered="#{not empty miFormulario.elegido}" columnClasses="label,value">
+
+                  <h:outputText value="Nombre:" />
+                  <h:outputText value="#{miFormulario.elegido.nombre}" />
+
+                  <h:outputText value="Apellido:" />
+                  <h:outputText value="#{miFormulario.elegido.apellido}" />
+
+                  <h:outputText value="direccion:" />
+                  <h:outputText value="#{miFormulario.elegido.direccion}"/>
+
+                  <h:outputText value="Telefono:" />
+                  <h:outputText value="#{miFormulario.elegido.telefono}" />
+
+                   <h:outputText value="Correo:" />
+                   <h:outputText value="#{miFormulario.elegido.correo}" />
+
+
+               </p:panelGrid>
+            </p:outputPanel>
+         </p:dialog>
 
       </h:form>
    </h:body>
